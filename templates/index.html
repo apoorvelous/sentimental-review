@@ -1,0 +1,141 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+      $(function(){
+        $("#submit").click(function(){
+          let data = {
+            feedback: $("#feedback").val()
+          }
+          $.ajax({
+            url: "/sentiment-analysis",
+            type: "post",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (result) {
+              $("#display_score").empty();
+              let score = result.data;
+              if (score === 2.5) {
+                $("#display_score").html(`<h3>Please provide feedback in english!</h3>`)
+              } else {
+                $("#display_score").html(`<h3>${result.data}</h3>`)
+                let round_score = Math.round(result.data);
+                $("#5_star").parent().css("color", "#bbb");
+                $("#4_star").parent().css("color", "#bbb");
+                $("#3_star").parent().css("color", "#bbb");
+                $("#2_star").parent().css("color", "#bbb");
+                $("#1_star").parent().css("color", "#bbb");
+                for (let i = 1; i <= round_score; i++) {
+                  $(`#${i}_star`).parent().css("color", "#f2b600");
+                }
+              }
+            },
+            error: function (result) {
+              alert(result.responseJSON.error);
+            },
+            data: JSON.stringify(data)
+          });
+        })
+      })
+    </script>
+    <style>
+      .btn-green2 {
+        color: #fff;
+        font-size: 18px;
+        min-height: 60px;
+        border-radius: 40px;
+        text-decoration: none;
+        display: inline-block;
+        line-height: 24px;
+        padding: 16px 30px 20px;
+        z-index: 1;
+        position: relative;
+        border: none;
+        background: #5dca88;
+        min-width: 30%;
+      }
+      .btn-green2:hover {
+        background: #21b191;
+        color: white;
+      }
+      .star-rating {
+        direction: rtl;
+        display: inline-block;
+        padding: 20px
+      }
+      .star-rating label {
+        color: #bbb;
+        font-size: 3em;
+        padding: 0;
+        -webkit-transition: all .3s ease-in-out;
+        transition: all .3s ease-in-out
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="container">
+            <header>
+             <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" style="background-color: #fff !important;">
+               <a class="navbar-brand" href="https://www.whitehatjr.com/" target="_blank" style="max-width:20em">
+                 <img src="/static/logo.png" class="img-fluid" />
+               </a>
+             </nav>
+           </header>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
+          <main class="container mt-5 text-center">
+            <div class="row mt-5 text-center mt-5">
+              <div class="col-sm-12 col-md-12 col-lg-12 mt-5">
+                <textarea class="feedback-text-area form-control mt-3" rows="5" id="feedback" placeholder="Enter your feedback"></textarea>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-sm-12 col-md-12 col-lg-12">
+                <button class='btn btn-green2' type="submit" id="submit">Submit</button>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-sm-12 col-md-12 col-lg-12" id="ratings">
+                <div class="star-rating">
+                  <label for="star-5" title="5 stars">
+                    <i class="active fa fa-star" id="5_star" aria-hidden="true"></i>
+                  </label>
+                  <label for="star-4" title="4 stars">
+                    <i class="active fa fa-star" id="4_star" aria-hidden="true"></i>
+                  </label>
+                  <label for="star-3" title="3 stars">
+                    <i class="active fa fa-star" id="3_star" aria-hidden="true"></i>
+                  </label>
+                  <label for="star-2" title="2 stars">
+                    <i class="active fa fa-star" id="2_star" aria-hidden="true"></i>
+                  </label>
+                  <label for="star-1" title="1 star">
+                    <i class="active fa fa-star" id="1_star" aria-hidden="true"></i>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-sm-12 col-md-12 col-lg-12" id="display_score">
+
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
