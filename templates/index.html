@@ -23,7 +23,7 @@
               $("#display_score").empty();
               let score = result.data;
               if (score === 2.5) {
-                $("#display_score").html(`<h3>Please provide feedback in english!</h3>`)
+                $("#display_score").html(`<h4>Sorry! I couldn't understand.</h4>`)
               } else {
                 $("#display_score").html(`<h3>${result.data}</h3>`)
                 let round_score = Math.round(result.data);
